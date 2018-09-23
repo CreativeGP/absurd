@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+        <title>-*- absurd -*-</title>
+
+        <style>
+         @terminal {
+             src: local('clacon.ttf');
+         }
+
+         html {
+             height: 100%;
+         }
+
+         body {
+             padding: 0;
+             margin: 0;
+
+             height: 100%;
+
+             background-color: black;
+             color: white;
+
+             font-family: 'terminal';
+         }
+
+         .panel {
+             width: calc(100% - 3px);
+             height: calc(100% - 3px);
+
+             border: 1px solid #ccc;
+         }
+
+         .panel-title {
+             width: 100%;
+
+             color: black;
+             background-color: #ccc;
+         }
+
+         .panel-contents pre {
+             font-family: 'terminal';
+         }
+        </style>
+
+        <script
+	    src="https://code.jquery.com/jquery-3.3.1.min.js"
+	    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	    crossorigin="anonymous"></script>
+        <script src="src/main.js"></script>
+    </head>
+    <body id="view">
+    </body>
+</html>
