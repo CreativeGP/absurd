@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
         <title>-*- absurd -*-</title>
 
+        <link href="src/reset.css" rel="stylesheet"/>
         <style>
          @terminal {
              src: local('clacon.ttf');
@@ -40,19 +41,26 @@
              background-color: #ccc;
          }
 
-         .panel-contents pre {
+         .panel-contents pre, input {
+             margin: 0;
              font-family: 'terminal', monospace;
+
+             font-size: 20px;
+             line-height: 20px;
          }
 
          .import {
              color: yellow;
          }
+
+
         </style>
 
         <script
 	    src="https://code.jquery.com/jquery-3.3.1.min.js"
 	    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
 	    crossorigin="anonymous"></script>
+        <script src="src/caret.js"></script>
         <script src="src/panel.js"></script>
         <script src="src/main.js"></script>
     </head>
