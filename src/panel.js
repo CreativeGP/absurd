@@ -73,6 +73,8 @@ class Panel {
         }
 
         if (idx == 0 && y != 0) return (return_error) ? -1 : 0;
+
+        idx += x;
         
         return idx;
     }
@@ -80,15 +82,9 @@ class Panel {
 
     char (x, y)
     {
-        let idx = 0;
-        for (let i = 0; i < y; i++) {
-            idx = this.content.indexOf("\n", idx) + 1;
-        }
-
-        if (idx == 0 && y != 0) return " ";
-
-        idx += x;
-
+        let idx = this.pos2idx(x, y, true);
+        if (idx == -1) return " ";
+        
         return this.content[idx];
     }
     
