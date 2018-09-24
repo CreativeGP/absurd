@@ -34,14 +34,7 @@
              border: 1px solid #ccc;
          }
 
-         .panel-title {
-             width: 100%;
-
-             color: black;
-             background-color: #ccc;
-         }
-
-         .panel-contents pre, input {
+         .panel-contents pre, input, #ruler, .panel-title, #mini {
              margin: 0;
              font-family: 'terminal', monospace;
 
@@ -49,8 +42,31 @@
              line-height: 20px;
          }
 
+         .panel-title {
+             width: 100%;
+
+             color: black;
+             background-color: #ccc;
+         }
+
+         #mini {
+             width: 100%;
+
+             color: white;
+             border: 1px solid #ccc;
+             background-color: black;
+
+             height: 20px;
+             position: fixed;
+             bottom: 0px;
+         }
+
          .import {
              color: yellow;
+         }
+
+         #ruler {
+             visibility: hidden;
          }
 
 
@@ -65,6 +81,10 @@
         <script src="src/panel.js"></script>
         <script src="src/main.js"></script>
     </head>
+    <span id="ruler">A</span>
     <body id="view">
+        <div id="mini">
+            <input style="width: 100%; color: white;" name="" type="text" value=""/>
+        </div>
     </body>
 </html>

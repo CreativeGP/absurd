@@ -19,3 +19,12 @@ if (!String.prototype.splice) {
 String.prototype.splice = function(idx, rem, str) {
     return this.slice(0, idx) + str + this.slice(idx + Math.abs(rem));
 };
+
+function fontSize(text, font) {
+    var myCanvas = fontSize.canvas || (fontSize.canvas = document.createElement("canvas"));
+    var context = myCanvas.getContext("2d");
+    context.font = font;
+    
+    var metrics = context.measureText(text);
+    return [metrics.width, metrics.height];
+};

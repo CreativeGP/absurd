@@ -1,6 +1,6 @@
-const user_conf = {
-    add_horizontal_panel: 'p',
-    delete_panel: 'P'
+let user_conf = {
+    add_horizontal_panel: 'F1',
+    delete_panel: 'F2'
 };
 
 class Editor {
@@ -13,12 +13,17 @@ class Editor {
 
         this.fired = false;
         $(window).keydown((e) => {
+//            e.preventDefault();
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                $(window).focus();
+            }
 
             for (let p of this.panels)
                 p.on_key(e);
             
             if (this.fired) return;
-            if (e.key != 'Shift') this.fired = true;
+            if (e.key != 'Shift' && e.key != 'Alt' && e.key != 'Control') this.fired = true;
 
             switch (e.key) {
             case user_conf.add_horizontal_panel:
@@ -57,6 +62,8 @@ class Editor {
 let editor = new Editor();
 
 $(function() {
+    user_conf.fontWidth =  $('#ruler').width();
+    user_conf.fontHeight = $('#ruler').height();
     // editor.add_horizontal();
     // editor.panels[0].draw();
 });

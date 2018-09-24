@@ -32,18 +32,6 @@ class Panel {
         case 'ArrowUp':
         case 'ArrowDown':
             break;
-        case 'Backspace':
-            this.content = this.content.slice(0, -1);
-            break;
-        case 'Enter':
-            this.content += "\n";
-            break;
-        case 'Tab':
-            this.content += "  ";
-            break;
-        default:
-            this.content += e.key;
-            break;
         }
         this.render();
     }
@@ -63,29 +51,6 @@ class Panel {
         this.d_self().css('top', '0');
         this.d_self().css('width', 'calc('+100/editor.wno+'% - 2px)');
         this.d_self().css('height', '100%');
-    }
-
-    pos2idx (x, y, return_error)
-    {
-        let idx = 0;
-        for (let i = 0; i < y; i++) {
-            idx = this.content.indexOf("\n", idx) + 1;
-        }
-
-        if (idx == 0 && y != 0) return (return_error) ? -1 : 0;
-
-        idx += x;
-        
-        return idx;
-    }
-
-
-    char (x, y)
-    {
-        let idx = this.pos2idx(x, y, true);
-        if (idx == -1) return " ";
-        
-        return this.content[idx];
     }
     
     remove() {
