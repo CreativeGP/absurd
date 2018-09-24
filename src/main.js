@@ -1,3 +1,8 @@
+const user_conf = {
+    add_horizontal_panel: 'p',
+    delete_panel: 'P'
+};
+
 class Editor {
     
     constructor() {
@@ -8,14 +13,21 @@ class Editor {
 
         this.fired = false;
         $(window).keydown((e) => {
+
+            for (let p of this.panels)
+                p.on_key(e);
+            
             if (this.fired) return;
             if (e.key != 'Shift') this.fired = true;
 
             switch (e.key) {
-            case 'p':
+            case user_conf.add_horizontal_panel:
                 this.add_horizontal();
                 break;
-            case 'P':
+            case user_conf.add_vertical_panel:
+                this.add_vertical();
+                break;
+            case user_conf.delete_panel:
                 this.wno--;
                 this.panels[this.panels.length-1].remove();
                 this.panels.pop();
@@ -33,49 +45,16 @@ class Editor {
         this.panels.push(new Panel(this.panels.length));
         this.wno++;
         this.panels_update();
-
     }
 
     panels_update() {
         for (let panel of this.panels) {
-            panel.draw();
+            panel.draw(this);
         }
     }
 };
 
 let editor = new Editor();
-
-class Panel {
-
-    constructor(id) {
-        this.position = '';
-        this.id = id;
-
-            $('#view').html($('#view').html()+`<div class="panel" id="panel${this.id}">
-            <div class="panel-title">*scratch*</div>
-            <div class="panel-contents">
-                <pre>
-#include &lt;stdio.h&gt;
-int main(void) {
-  printf("hello world");
-}
-                </pre>
-            </div>
-</div>`);
-}
-
-    draw() {
-        $(`#panel${this.id}`).css('position', 'fixed');
-        $(`#panel${this.id}`).css('left', 'calc('+(100/editor.wno)*this.id+'% - 2px)');
-        $(`#panel${this.id}`).css('top', '0');
-        $(`#panel${this.id}`).css('width', 'calc('+100/editor.wno+'% - 2px)');
-        $(`#panel${this.id}`).css('height', '100%');
-    }
-
-    remove() {
-        $(`#panel${this.id}`).remove();
-    }
-}
 
 $(function() {
     // editor.add_horizontal();
