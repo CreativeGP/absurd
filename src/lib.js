@@ -21,10 +21,8 @@ String.prototype.splice = function(idx, rem, str) {
 };
 
 function fontSize(text, font) {
-    var myCanvas = fontSize.canvas || (fontSize.canvas = document.createElement("canvas"));
-    var context = myCanvas.getContext("2d");
-    context.font = font;
+    $('#ruler').html(text);
+    $('#ruler').css('font-family', font);
     
-    var metrics = context.measureText(text);
-    return [metrics.width, metrics.height];
+    return [$('#ruler').width(), $('#ruler').height()];
 };

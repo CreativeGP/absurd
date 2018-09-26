@@ -62,8 +62,9 @@ class Editor {
 let editor = new Editor();
 
 $(function() {
-    user_conf.fontWidth =  $('#ruler').width();
-    user_conf.fontHeight = $('#ruler').height();
+    let fontDimension = fontSize('A', "'terminal', monospace");
+    user_conf.fontWidth = fontDimension[0];
+    user_conf.fontHeight = fontDimension[1];
     // editor.add_horizontal();
     // editor.panels[0].draw();
 });
