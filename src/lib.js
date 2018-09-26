@@ -21,7 +21,7 @@ String.prototype.splice = function(idx, rem, str) {
 };
 
 function fontSize(text, font) {
-    $('#ruler').html(text);
+    $('#ruler').html(text.replace(/ /g, 'A'));
     $('#ruler').css('font-family', font);
     
     return [$('#ruler').width(), $('#ruler').height()];

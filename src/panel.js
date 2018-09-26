@@ -2,21 +2,23 @@ class Panel {
 
     constructor(id) {
         this.position = '';
-        this.content = '';
         this.id = id;
         this.focused = false;
-        this.caret = new Caret(this);
 
         $('#view').html($('#view').html()+`<div class="panel" id="panel${this.id}">
             <div class="panel-title">*scratch*</div>
             <div class="panel-contents">
-                <pre></pre>
+                <pre>海鮮丼を食べたい
+食べたい</pre>
             </div>
 </div>`);
         this.d_self = () => $(`#panel${this.id}`);
         this.d_content = () => $(`#panel${this.id} .panel-contents pre`);
+        this.content = Unistring(this.d_content().html());
+        this.paddings = [[0]];
         
-
+        this.caret = new Caret(this);
+        this.caret.calculate_all_paddings();
     }
 
     on_key(e) 
@@ -37,7 +39,7 @@ class Panel {
     }
 
     render() {
-        let compiled = this.content;
+        let compiled = this.content.toString();
         compiled = compiled.replace(/</g, "&lt;");
         compiled = compiled.replace(/>/g, "&gt;");
 //        compiled = compiled.replace(/[\n\r]/g, "<br>");

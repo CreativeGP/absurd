@@ -16,15 +16,16 @@ class Caret {
             break;
         case 'Backspace':
             let idx = this.pos2idx();
-            if (this._panel.content[idx-1] == "\n") {
+            if (this._panel.content.charAt(idx-1) == "\n") {
                 this.position[1]--;
                 let tmp = this.pos2idx(0, this.position[1], true);
-                this.position[0] = this._panel.content.indexOf("\n", tmp) - tmp;
-                this._panel.content = this._panel.content.slice(0, idx-1) + this._panel.content.slice(idx);
+                this.position[0] = this._panel.content.toString().indexOf("\n", tmp) - tmp;
+//                this._panel.content = this._panel.content.slice(0, idx-1) + this._panel.content.slice(idx);
             } else {
-                this._panel.content = this._panel.content.slice(0, idx-1) + this._panel.content.slice(idx);
+//                this._panel.content = this._panel.content.slice(0, idx-1) + this._panel.content.slice(idx);
                 this.position[0]--;
             }
+                this._panel.content.delete(idx-1, 1);
             break;
         case 'ArrowLeft':
             this.position[0]--;
@@ -60,14 +61,14 @@ class Caret {
         let idx = this.pos2idx();
         if (idx === -1) return;
         
-        this._panel.content = this._panel.content.splice(idx, 0, str);
+        this._panel.content.insert(str, idx);
     }
 
     pos2idx (x = this.position[0], y = this.position[1], return_error = true)
     {
         let idx = 0;
         for (let i = 0; i < y; i++) {
-            idx = this._panel.content.indexOf("\n", idx) + 1;
+            idx = this._panel.content.toString().indexOf("\n", idx) + 1;
         }
 
         if (idx == 0 && y != 0) return (return_error) ? -1 : 0;
@@ -80,15 +81,48 @@ class Caret {
     char (x = this.position[0], y = this.position[1])
     {
         let idx = this.pos2idx(x, y, true);
-        if (idx == -1) return " ";
+        if (idx == -1 || !this._panel.content) return " ";
         
-        return this._panel.content[idx];
+        return this._panel.content.clusterAt(idx);
+    }
+
+    calculate_all_paddings()
+    {
+        let y = 0, x = 1;
+        for (let i = 0; ; i++) {
+            let tmp = this._panel.content.clusterAt(i);
+            if (!tmp) break;
+
+            if (tmp == "\n") {
+                this._panel.paddings.push([0]);
+                y++;
+                x = 1;
+                continue;
+            }
+
+            let w = fontSize(tmp, "'terminal', monospace")[0];
+            if (w >= user_conf.fontWidth) {
+                if (x == 0) this._panel.paddings[y][x] = w;
+                else this._panel.paddings[y][x] = this._panel.paddings[y][x-1] + w;
+            } else {
+                if (x == 0) this._panel.paddings[y][x] = w;
+                else this._panel.paddings[y][x] = this._panel.paddings[y][x-1] + w;
+                
+            }
+            x ++;
+        }
     }
 
     render ()
     {
-        $('#caret').val(this.char(this.position[0], this.position[1]));
-        $('#caret').css('left', this.position[0]*user_conf.fontWidth+'px');
+        let chr = this.char(this.position[0], this.position[1]);
+        //        let fontDimension = fontSize(chr, "'terminal', monospace");
+        let fontWidth = (this._panel.paddings[this.position[1]][this.position[0]+1] - this._panel.paddings[this.position[1]][this.position[0]]);
+ 
+        $('#caret').val(chr);
+        $('#caret').css('width', fontWidth+'px');
+        $('#caret').css('height', user_conf.fontHeight+'px');
+        $('#caret').css('left', this._panel.paddings[this.position[1]][this.position[0]]+'px');
         $('#caret').css('top', (this.position[1]+1)*user_conf.fontHeight+'px');
     }
 
@@ -103,6 +137,6 @@ class Caret {
         $('#caret').css('height', user_conf.fontHeight+'px');
         $('#caret').focus();
 
-        this.render();
+//        this.render();
     }
 }
