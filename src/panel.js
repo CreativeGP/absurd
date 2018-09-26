@@ -18,7 +18,7 @@ class Panel {
         this.paddings = [[0]];
         
         this.caret = new Caret(this);
-        this.caret.calculate_all_paddings();
+        this.caret.update_all_paddings();
     }
 
     on_key(e) 

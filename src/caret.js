@@ -25,18 +25,22 @@ class Caret {
 //                this._panel.content = this._panel.content.slice(0, idx-1) + this._panel.content.slice(idx);
                 this.position[0]--;
             }
-                this._panel.content.delete(idx-1, 1);
+
+            this._panel.content.delete(idx-1, 1);
+            this.update_paddings(this.position[1]);
             break;
         case 'ArrowLeft':
             this.position[0]--;
             break;
         case 'Enter':
             this.insert("\n");
+            this.update_paddings(this.position[1]);
             this.position[1]++;
             this.position[0] = 0;
             break;
         case 'Tab':
             this.insert("    ");
+            this.update_paddings(this.position[1]);
             this.position[0] += 4;
             break;
         case 'ArrowRight':
@@ -50,6 +54,7 @@ class Caret {
             break;
         default:
             this.insert(e.key);
+            this.update_paddings(this.position[1]);
             this.position[0]++;
             break;
         }
@@ -78,6 +83,16 @@ class Caret {
         return idx;
     }
 
+    // little fast!
+    line2idx (y)
+    {
+        let res = 0;
+        for (let i = 0; i < y; i++) {
+            res += this._panel.paddings[i].length + 1;
+        }
+        return res;
+    }
+
     char (x = this.position[0], y = this.position[1])
     {
         let idx = this.pos2idx(x, y, true);
@@ -86,7 +101,25 @@ class Caret {
         return this._panel.content.clusterAt(idx);
     }
 
-    calculate_all_paddings()
+    update_paddings (y)
+    {
+        let x = 1;
+        this._panel.paddings[y] = [0];
+        for (let i = this.line2idx(y); ; i++) {
+            let tmp = this._panel.content.clusterAt(i);
+            if (!tmp || tmp == "\n") break;
+
+            let w = fontSize(tmp, "'terminal', monospace")[0];
+            if (w >= user_conf.fontWidth) {
+                this._panel.paddings[y][x] = this._panel.paddings[y][x-1] + w;
+            } else {
+                this._panel.paddings[y][x] = this._panel.paddings[y][x-1] + w;
+            }
+            x ++;
+        }
+    }
+
+    update_all_paddings ()
     {
         let y = 0, x = 1;
         for (let i = 0; ; i++) {
