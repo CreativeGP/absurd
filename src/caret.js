@@ -187,23 +187,23 @@ class Caret {
             fontWidth = user_conf.fontWidth;
         else fontWidth = (this._panel.paddings[this.position[1]][this.position[0]+1] - this._panel.paddings[this.position[1]][this.position[0]]);
  
-        $('#caret').val(chr);
-        $('#caret').css('width', fontWidth+'px');
-        $('#caret').css('height', user_conf.fontHeight+'px');
-        $('#caret').css('left', this._panel.paddings[this.position[1]][this.position[0]]+'px');
-        $('#caret').css('top', (this.position[1]+1)*user_conf.fontHeight+'px');
+        $('#caret'+this._panel.id).val(chr);
+        $('#caret'+this._panel.id).css('width', fontWidth+'px');
+        $('#caret'+this._panel.id).css('height', user_conf.fontHeight+'px');
+        $('#caret'+this._panel.id).css('left', this._panel.d_content().offset().left + this._panel.paddings[this.position[1]][this.position[0]]+'px');
+        $('#caret'+this._panel.id).css('top', this._panel.d_content().offset().top + this.position[1]*user_conf.fontHeight+'px');
     }
 
     draw ()
     {
-        $('#view').html('<input id="caret" type="text"></input>'+$('#view').html());
-        $('#caret').css('position', 'fixed');
-        $('#caret').css('z-index', '999');
-        $('#caret').css('color', 'black');
-        $('#caret').css('background-color', 'white');
-        $('#caret').css('width', user_conf.fontWidth+'px');
-        $('#caret').css('height', user_conf.fontHeight+'px');
-        $('#caret').focus();
+        $('#view').html('<input id="caret'+this._panel.id+'" type="text"></input>'+$('#view').html());
+        $('#caret'+this._panel.id).css('position', 'fixed');
+        $('#caret'+this._panel.id).css('z-index', '999');
+        $('#caret'+this._panel.id).css('color', 'black');
+        $('#caret'+this._panel.id).css('background-color', 'white');
+        $('#caret'+this._panel.id).css('width', user_conf.fontWidth+'px');
+        $('#caret'+this._panel.id).css('height', user_conf.fontHeight+'px');
+        $('#caret'+this._panel.id).focus();
 
 //        this.render();
     }

@@ -1,9 +1,9 @@
 class Panel {
 
-    constructor(id) {
+    constructor(id, _editor) {
         this.position = '';
         this.id = id;
-        this.focused = false;
+        this._editor = _editor;
 
         $('#view').html($('#view').html()+`<div class="panel" id="panel${this.id}">
             <div class="panel-title">*scratch*</div>
@@ -23,7 +23,7 @@ class Panel {
 
     on_key(e) 
     {
-        this.caret.on_key(e);
+        if (this.id == this._editor.focusid) this.caret.on_key(e);
         
         switch (e.key) {
         case 'Shift':

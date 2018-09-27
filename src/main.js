@@ -1,6 +1,7 @@
 let user_conf = {
     add_horizontal_panel: 'F1',
-    delete_panel: 'F2'
+    delete_panel: 'F2',
+    
 };
 
 class Editor {
@@ -10,6 +11,7 @@ class Editor {
         this.panels = [];
         this.wno = 0;
         this.hno = 0;
+        this.focusid = 0;
 
         this.fired = false;
         $(window).keydown((e) => {
@@ -39,6 +41,17 @@ class Editor {
                 this.panels_update();
                 break;
             }
+
+            if (e.ctrlKey) {
+                switch (e.key) {
+                case 'ArrowLeft':
+                    this.change_focusid((this.focusid-1) % this.panels.length);
+                    break;
+                case 'ArrowRight':
+                    this.change_focusid((this.focusid+1) % this.panels.length);
+                    break;
+                }
+            }
         });
 
         $(window).keyup((e) => {
@@ -46,8 +59,17 @@ class Editor {
         });
     }
 
+    change_focusid (id)
+    {
+        $('#caret'+this.focusid).css('visibility', 'hidden');
+        this.focusid = id;
+        this.panels[this.focusid].caret.update_all_paddings();
+        $('#caret'+this.focusid).css('visibility', 'visible');
+    }
+
     add_horizontal() {
-        this.panels.push(new Panel(this.panels.length));
+        this.panels.push(new Panel(this.panels.length, this));
+        this.change_focusid(this.panels.length-1);
         this.wno++;
         this.panels_update();
     }
