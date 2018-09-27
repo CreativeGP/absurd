@@ -36,6 +36,7 @@ class Caret {
             this.insert("\n");
             this.update_paddings(this.position[1]);
             this.position[1]++;
+            this.update_paddings(this.position[1]);
             this.position[0] = 0;
             break;
         case 'Tab':
@@ -46,12 +47,43 @@ class Caret {
         case 'ArrowRight':
             this.position[0]++;
             break;
-        case 'ArrowUp':
+        case 'ArrowUp': {
+            if (this.position[1] == 0) return;
+            
+            let nowX = (this._panel.paddings[this.position[1]][this.position[0]+1] == null) ?
+                this._panel.paddings[this.position[1]][this.position[0]] :
+                (this._panel.paddings[this.position[1]][this.position[0]] +
+                 this._panel.paddings[this.position[1]][this.position[0]+1])/2;
+            let newX = 0;
+            for (let i = 0; ; i++) {
+                if (this._panel.paddings[this.position[1]-1][i] == null ||
+                    this._panel.paddings[this.position[1]-1][i] > nowX) {
+                    newX = i-1;
+                    break;
+                }
+            }
+            
             this.position[1]--;
-            break;
-        case 'ArrowDown':
+            this.position[0] = newX;
+        } break;
+
+        case 'ArrowDown': {
+            let nowX = (this._panel.paddings[this.position[1]][this.position[0]+1] == null) ?
+                this._panel.paddings[this.position[1]][this.position[0]] :
+                (this._panel.paddings[this.position[1]][this.position[0]] +
+                 this._panel.paddings[this.position[1]][this.position[0]+1])/2;
+            let newX = 0;
+            for (let i = 0; ; i++) {
+                if (this._panel.paddings[this.position[1]+1][i] == null ||
+                    this._panel.paddings[this.position[1]+1][i] > nowX) {
+                    newX = i-1;
+                    break;
+                }
+            }
             this.position[1]++;
-            break;
+            this.position[0] = newX;
+        } break;
+            
         default:
             this.insert(e.key);
             this.update_paddings(this.position[1]);
@@ -73,7 +105,7 @@ class Caret {
     {
         let idx = 0;
         for (let i = 0; i < y; i++) {
-            idx = this._panel.content.toString().indexOf("\n", idx) + 1;
+            idx = this._panel.content.toString().indexOf("\n", idx)+1;
         }
 
         if (idx == 0 && y != 0) return (return_error) ? -1 : 0;
@@ -88,7 +120,7 @@ class Caret {
     {
         let res = 0;
         for (let i = 0; i < y; i++) {
-            res += this._panel.paddings[i].length + 1;
+            res += this._panel.paddings[i].length;
         }
         return res;
     }
@@ -150,7 +182,10 @@ class Caret {
     {
         let chr = this.char(this.position[0], this.position[1]);
         //        let fontDimension = fontSize(chr, "'terminal', monospace");
-        let fontWidth = (this._panel.paddings[this.position[1]][this.position[0]+1] - this._panel.paddings[this.position[1]][this.position[0]]);
+        let fontWidth;
+        if (this._panel.paddings[this.position[1]] == null || this._panel.paddings[this.position[1]][this.position[0]+1] == null || this._panel.paddings[this.position[1]][this.position[0]] == null)
+            fontWidth = user_conf.fontWidth;
+        else fontWidth = (this._panel.paddings[this.position[1]][this.position[0]+1] - this._panel.paddings[this.position[1]][this.position[0]]);
  
         $('#caret').val(chr);
         $('#caret').css('width', fontWidth+'px');
