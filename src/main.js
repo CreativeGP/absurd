@@ -1,7 +1,8 @@
 let user_conf = {
     add_horizontal_panel: 'F1',
     delete_panel: 'F2',
-    
+    open_file_buffer: 'F3',
+    open_file: 'F4',
 };
 
 class Editor {
@@ -29,7 +30,7 @@ class Editor {
 
             switch (e.key) {
             case user_conf.add_horizontal_panel:
-                this.add_horizontal();
+                this.add_horizontal('*scratch*');
                 break;
             case user_conf.add_vertical_panel:
                 this.add_vertical();
@@ -40,6 +41,11 @@ class Editor {
                 this.panels.pop();
                 this.panels_update();
                 break;
+	    case user_conf.open_file_buffer:
+                this.add_horizontal('*file open*');
+		break;
+	    case user_conf.open_file:
+		break;
             }
 
             if (e.ctrlKey) {
@@ -67,8 +73,8 @@ class Editor {
         $('#caret'+this.focusid).css('visibility', 'visible');
     }
 
-    add_horizontal() {
-        this.panels.push(new Panel(this.panels.length, this));
+    add_horizontal(title) {
+        this.panels.push(new Panel(title, this.panels.length, this));
         this.change_focusid(this.panels.length-1);
         this.wno++;
         this.panels_update();
@@ -84,6 +90,13 @@ class Editor {
 let editor = new Editor();
 
 $(function() {
+    // Check for the various File API support.
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+	// Great success! All the File APIs are supported.
+    } else {
+	alert('The File APIs are not fully supported in this browser.');
+    }
+
     let fontDimension = fontSize('A', "'terminal', monospace");
     user_conf.fontWidth = fontDimension[0];
     user_conf.fontHeight = fontDimension[1];

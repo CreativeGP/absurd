@@ -1,15 +1,15 @@
 class Panel {
 
-    constructor(id, _editor) {
+    constructor(title, id, _editor, default_content="") {
         this.position = '';
         this.id = id;
         this._editor = _editor;
+	this.title = title;
 
         $('#view').html($('#view').html()+`<div class="panel" id="panel${this.id}">
-            <div class="panel-title">*scratch*</div>
+            <div class="panel-title">${this.title}</div>
             <div class="panel-contents">
-                <pre>海鮮丼を食べたい
-食べたい</pre>
+                <pre>${default_content}</pre>
             </div>
 </div>`);
         this.d_self = () => $(`#panel${this.id}`);
