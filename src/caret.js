@@ -20,24 +20,35 @@ class Caret {
                 this.position[1]--;
                 let tmp = this.pos2idx(0, this.position[1], true);
                 this.position[0] = this._panel.content.toString().indexOf("\n", tmp) - tmp;
+
+		this._panel.content.delete(idx-1, 1);
+		this._panel.paddings.pop();
+		for (let i = this.position[1], len = this._panel.paddings.length; i < len; i++) {
+		    this.update_paddings(i);
+		}
+
+		
 //                this._panel.content = this._panel.content.slice(0, idx-1) + this._panel.content.slice(idx);
             } else {
 //                this._panel.content = this._panel.content.slice(0, idx-1) + this._panel.content.slice(idx);
                 this.position[0]--;
+		this._panel.content.delete(idx-1, 1);
+		this.update_paddings(this.position[1]);
             }
 
-            this._panel.content.delete(idx-1, 1);
-            this.update_paddings(this.position[1]);
             break;
         case 'ArrowLeft':
             this.position[0]--;
             break;
         case 'Enter':
             this.insert("\n");
-            this.update_paddings(this.position[1]);
-            this.position[1]++;
-            this.update_paddings(this.position[1]);
+
             this.position[0] = 0;
+	    for (let i = this.position[1], len = this._panel.paddings.length; i <= len; i++) {
+		this.update_paddings(i);
+	    }
+	    
+            this.position[1]++;
             break;
         case 'Tab':
             this.insert("    ");
@@ -56,7 +67,9 @@ class Caret {
                  this._panel.paddings[this.position[1]][this.position[0]+1])/2;
             let newX = 0;
             for (let i = 0; ; i++) {
-                if (this._panel.paddings[this.position[1]-1][i] == null ||
+                if (false ||
+		    this._panel.paddings[this.position[1]-1] == null ||
+		    this._panel.paddings[this.position[1]-1][i] == null ||
                     this._panel.paddings[this.position[1]-1][i] > nowX) {
                     newX = i-1;
                     break;
@@ -74,7 +87,9 @@ class Caret {
                  this._panel.paddings[this.position[1]][this.position[0]+1])/2;
             let newX = 0;
             for (let i = 0; ; i++) {
-                if (this._panel.paddings[this.position[1]+1][i] == null ||
+                if (false ||
+		    this._panel.paddings[this.position[1]+1] == null ||
+		    this._panel.paddings[this.position[1]+1][i] == null ||
                     this._panel.paddings[this.position[1]+1][i] > nowX) {
                     newX = i-1;
                     break;

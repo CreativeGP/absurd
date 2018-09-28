@@ -15,7 +15,7 @@ class Editor {
 
         this.fired = false;
         $(window).keydown((e) => {
-//            e.preventDefault();
+            e.preventDefault();
             if (e.key === 'Tab') {
                 e.preventDefault();
                 $(window).focus();
