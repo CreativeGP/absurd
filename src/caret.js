@@ -4,6 +4,7 @@ class Caret {
         this.position = [0, 0];
         this._panel = panel;
         this.draw();
+	// NOTE: これはデザインのバグを解決するために必要です
     }
 
     on_key (e)
@@ -218,6 +219,7 @@ class Caret {
         $('#caret'+this._panel.id).css('background-color', 'white');
         $('#caret'+this._panel.id).css('width', user_conf.fontWidth+'px');
         $('#caret'+this._panel.id).css('height', user_conf.fontHeight+'px');
+        $('#caret'+this._panel.id).css('top', this._panel.d_self().find('.panel-title').height() +'px');
         $('#caret'+this._panel.id).focus();
 
 //        this.render();

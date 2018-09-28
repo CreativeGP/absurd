@@ -43,6 +43,7 @@ class Editor {
                 break;
 	    case user_conf.open_file_buffer:
                 this.add_horizontal('*file open*');
+                this.panels[this.panels.length-1].set_color('crimson');
 		break;
 	    case user_conf.open_file:
 		break;

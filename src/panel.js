@@ -21,6 +21,17 @@ class Panel {
         this.caret.update_all_paddings();
     }
 
+    set_style (name, value)
+    {
+	this.d_self().css(name, value);
+    }
+
+    set_color (col)
+    {
+	this.d_self().find('.panel-title').css('background-color', col);
+	this.set_style('border-color', col);
+    }
+
     on_key(e) 
     {
         if (this.id == this._editor.focusid) this.caret.on_key(e);
