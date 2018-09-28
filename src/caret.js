@@ -219,9 +219,17 @@ class Caret {
         $('#caret'+this._panel.id).css('background-color', 'white');
         $('#caret'+this._panel.id).css('width', user_conf.fontWidth+'px');
         $('#caret'+this._panel.id).css('height', user_conf.fontHeight+'px');
-        $('#caret'+this._panel.id).css('top', this._panel.d_self().find('.panel-title').height() +'px');
+	// TODO: 縦分割で困りそう
+        $('#caret'+this._panel.id).css('top', this._panel.d_content().offset().top +'px');
+        $('#caret'+this._panel.id).css('left', this._panel.d_content().offset().left+'px');
+	
         $('#caret'+this._panel.id).focus();
 
 //        this.render();
+    }
+
+    remove ()
+    {
+        $('#caret'+this._panel.id).remove();
     }
 }

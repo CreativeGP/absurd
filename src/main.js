@@ -22,8 +22,9 @@ class Editor {
                 $(window).focus();
             }
 
-            for (let p of this.panels)
-                p.on_key(e);
+	    if (!(e.key.length != 1 && e.key[0] == 'F'))
+		for (let p of this.panels)
+                    p.on_key(e);
             
             if (this.fired) return;
             if (e.key != 'Shift' && e.key != 'Alt' && e.key != 'Control') this.fired = true;
@@ -40,12 +41,31 @@ class Editor {
                 this.panels[this.panels.length-1].remove();
                 this.panels.pop();
                 this.panels_update();
+		this.change_focusid(this.panels.length-1);
                 break;
 	    case user_conf.open_file_buffer:
                 this.add_horizontal('*file open*');
-                this.panels[this.panels.length-1].set_color('crimson');
+                this.panels[this.panels.length-1].set_color('coral');
 		break;
 	    case user_conf.open_file:
+		let path = this.panels[this.panels.length-1].content.toString();
+
+		let corpize = e=>`https://cgp-corp.herokuapp.com/?url=${encodeURIComponent(e)}`;
+		if (path.match(/http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/)) {
+		    fetch(corpize(path)).then(res => res.text())
+			.then(text => {
+			    this.panels[this.panels.length-2].content.append(text);
+			    this.panels[this.panels.length-2].caret.update_all_paddings();
+			    this.panels[this.panels.length-2].render();
+			    this.panels[this.panels.length-2].set_title(path.substring(path.lastIndexOf('/')+1));
+			    
+			    this.wno--;
+			    this.panels[this.panels.length-1].remove();
+			    this.panels.pop();
+			    this.panels_update();
+			    this.change_focusid(this.panels.length-1);
+			});
+		}
 		break;
             }
 
@@ -75,9 +95,9 @@ class Editor {
     }
 
     add_horizontal(title) {
+        this.wno++;
         this.panels.push(new Panel(title, this.panels.length, this));
         this.change_focusid(this.panels.length-1);
-        this.wno++;
         this.panels_update();
     }
 

@@ -32,6 +32,12 @@ class Panel {
 	this.set_style('border-color', col);
     }
 
+    set_title (title)
+    {
+	this.title = title;
+	this.d_self().find('.panel-title').text(title);
+    }
+
     on_key(e) 
     {
         if (this.id == this._editor.focusid) this.caret.on_key(e);
@@ -64,9 +70,12 @@ class Panel {
         this.d_self().css('top', '0');
         this.d_self().css('width', 'calc('+100/editor.wno+'% - 2px)');
         this.d_self().css('height', '100%');
+
+	this.caret.draw();
     }
     
     remove() {
         $(`#panel${this.id}`).remove();
+	this.caret.remove();
     }
 }
