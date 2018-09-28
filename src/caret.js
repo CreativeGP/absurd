@@ -4,7 +4,8 @@ class Caret {
         this.position = [0, 0];
         this._panel = panel;
         this.draw();
-	// NOTE: これはデザインのバグを解決するために必要です
+
+        $('#view').html('<input id="caret'+this._panel.id+'" type="text"></input>'+$('#view').html());
     }
 
     on_key (e)
@@ -212,7 +213,6 @@ class Caret {
 
     draw ()
     {
-        $('#view').html('<input id="caret'+this._panel.id+'" type="text"></input>'+$('#view').html());
         $('#caret'+this._panel.id).css('position', 'fixed');
         $('#caret'+this._panel.id).css('z-index', '999');
         $('#caret'+this._panel.id).css('color', 'black');
