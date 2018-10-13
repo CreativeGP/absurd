@@ -1,10 +1,11 @@
 class Panel {
 
-    constructor(title, id, _editor, default_content="") {
+    constructor(title, id, _editor, default_content="", file=null) {
         this.position = '';
         this.id = id;
         this._editor = _editor;
 	this.title = title;
+        this.file = file;
 
         $('#view').html($('#view').html()+`<div class="panel" id="panel${this.id}">
             <div class="panel-title">${this.title}</div>
@@ -36,6 +37,13 @@ class Panel {
     {
 	this.title = title;
 	this.d_self().find('.panel-title').text(title);
+    }
+
+    change_content (str)
+    {
+        this.content = Unistring(str);
+        this.caret.update_all_paddings();
+        this.render();
     }
 
     on_key(e) 
